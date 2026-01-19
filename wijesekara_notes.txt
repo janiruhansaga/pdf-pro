@@ -1,0 +1,49 @@
+// WIJESEKARA MAP (Standard)
+// Normal:
+// q=ු w=අ e=ැ r=ර t=එ y=හ u=ම i=ස o=ද p=ච
+// a=් s=ි d=ා f=ෙ g=ට h=ය j=ව k=න l=ක
+// z=' x=ං c=ජ v=ඩ b=ඉ n=බ m=ප
+
+// Shift:
+// Q=ූ W=උ E=ෑ R=ෘ T=ඒ Y=ශ U=ඹ I=ෂ O=ධ P=ඡ
+// A=්‍ර S=ී D=ෘ F=ේ G=ඨ H=්‍ය J=ළ K=ණ L=ඛ
+// Z=" X=ඃ C=ඣ V=ඪ B=ඊ N=භ M=ඵ
+
+// Logic:
+// Handle `keypress` or `input`.
+// For standard layout, single key replacement is usually sufficient, unlike phonetic.
+// But some modifiers (combo) exist, like `f` then `g` -> `ටෙ` -> `ටෙ`?
+// In Wijesekara, to write `ටෙ`, you type `f` (ෙ) then `g` (ට).
+// Visual order: `ෙ` + `ට`.
+// Unicode order: `ට` + `ෙ`. (Consonant first, then Modifier).
+// This is the tricky part!
+// "Standard Wijesekara" usually implies visual typing.
+// If I type `f`, I see `ෙ`. If I type `g`, I see `ට`.
+// Result on screen: `ෙට`.
+// BUT correct Unicode is `ටෙ`.
+// Modern inputs handle this by "Smart Reordering" or just enforcing Unicode order.
+// User requirement: "normal wijesekara style ekata sinhala type wenna ona".
+// Normally, Wijesekara typists type Modifier First (`ෙ`) then Consonant (`ට`) for `ටෙ`.
+// So I need to SWAP them to form valid Unicode `ටෙ`.
+
+// STRATEGY:
+// If PREV char is a 'Pre-Consonant Modifier' ('ෙ', 'ේ', 'ෛ'):
+// And CURR char is a Consonant:
+// SWAP them.
+// e.g. Buffer has `ෙ`. I type `g` -> `ට`.
+// Buffer becomes `ෙට`.
+// I detect this and swap to `ටෙ`.
+
+// Modifiers that come BEFORE consonant in visual typing:
+// f = ෙ
+// F = ේ
+// G -> no
+// X -> no.
+
+// So:
+// 1. Maintain a map.
+// 2. On Input:
+//    - Convert Key to Sinhala Char.
+//    - Insert Char.
+//    - Check Last 2 chars.
+//    - If [Modifier] + [Consonant], Swap.

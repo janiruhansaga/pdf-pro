@@ -1,0 +1,25 @@
+/* Apply the Sinhala font specifically to the typing area */
+.sinhala-font {
+    font-family: "Noto Sans Sinhala", sans-serif;
+}
+
+/* Ensure the font is applied generally */
+body {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* Custom scrollbar for textarea */
+textarea::-webkit-scrollbar {
+    width: 8px;
+}
+textarea::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+textarea::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+textarea::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
