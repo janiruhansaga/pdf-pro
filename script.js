@@ -1,5 +1,5 @@
 // Sinhala Phonetic Typing Tool
-// Script: Rich Text Editor Version
+// Script: Rich Text Editor Version - Multi-Page Support
 
 let currentMode = 'uni'; // 'uni', 'sinhala', 'english'
 
@@ -9,14 +9,17 @@ const uniConsonants = {
     'p': 'ප්', 's': 'ස්', 'd': 'ඩ්', 'f': 'ෆ්', 'g': 'ග්',
     'h': 'හ්', 'j': 'ජ්', 'k': 'ක්', 'l': 'ල්', 'c': 'ක්',
     'v': 'ව්', 'b': 'බ්', 'n': 'න්', 'm': 'ම්',
-    'x': 'ං', 'z': 'ෙ'
+    'x': 'ං', 'z': 'ෙ',
+    'T': 'ඨ්', 'P': 'ඵ්', 'D': 'ඪ්', 'S': 'ෂ්', 'G': 'ඝ්', 'J': 'ඣ්',
+    'L': 'ළ්', 'B': 'ඹ්', 'N': 'ණ්', 'X': 'ඞ'
 };
 const uniVowels = {
     'a': 'අ', 'e': 'එ', 'i': 'ඉ', 'o': 'ඔ', 'u': 'උ',
-    'ii': 'ඊ', 'uu': 'ඌ', 'ee': 'ඒ', 'oo': 'ඕ'
+    'ii': 'ඊ', 'uu': 'ඌ', 'ee': 'ඒ', 'oo': 'ඕ',
+    'E': 'ඓ', 'R': 'ඍ'
 };
 const uniVowelModifiers = {
-    'a': '', 'aa': 'ා', 'e': 'ෙ', 'i': 'ි', 'u': 'ු', 
+    'a': '', 'aa': 'ා', 'e': 'ෙ', 'i': 'ි', 'u': 'ු',
     'o': 'ො', 'ii': 'ී', 'uu': 'ූ', 'ee': 'ේ', 'oo': 'ෝ'
 };
 const uniReplacements = [
@@ -33,6 +36,7 @@ const uniReplacements = [
     { pattern: 'ිi', replacement: 'ී' }, // i + i -> ii (ී)
     { pattern: 'ුu', replacement: 'ූ' }, // u + u -> uu (ූ)
     { pattern: 'ොo', replacement: 'ෝ' }, // o + o -> oo (ෝ)
+    { pattern: 'ඍR', replacement: 'ඎ' }, // R + R -> RR (ඎ)
 ];
 
 // --- WIJESEKARA MAPS ---
@@ -63,6 +67,14 @@ const clearBtn = document.getElementById('clearBtn');
 const copyBtn = document.getElementById('copyBtn');
 const toast = document.getElementById('toast');
 const toastMsg = document.getElementById('toastMsg');
+
+// Page Controls
+const prevPageBtn = document.getElementById('prevPageBtn');
+const nextPageBtn = document.getElementById('nextPageBtn');
+const addPageBtn = document.getElementById('addPageBtn');
+const deletePageBtn = document.getElementById('deletePageBtn');
+const pageIndicator = document.getElementById('pageIndicator');
+const previewPageWrapper = document.getElementById('previewPageWrapper'); // Container for pages
 
 // Formatting Buttons
 const cmdBold = document.getElementById('cmdBold');
@@ -112,21 +124,100 @@ btnSinhala.addEventListener('click', () => setMode('sinhala'));
 btnEnglish.addEventListener('click', () => setMode('english'));
 
 
+// --- PAGE STATE MANAGEMENT ---
+let pages = [
+    { id: 1, content: '' } // Integrated first page
+];
+let currentPageIndex = 0;
+
+function initPages() {
+    renderEditor();
+    renderPreview();
+    updatePageControls();
+}
+
+function saveCurrentPage() {
+    pages[currentPageIndex].content = editor.innerHTML;
+}
+
+function renderEditor() {
+    editor.innerHTML = pages[currentPageIndex].content;
+    // Restore Placeholder behavior if empty? CSS handles it via :empty
+}
+
+function addPage() {
+    saveCurrentPage();
+    const newId = pages.length > 0 ? Math.max(...pages.map(p => p.id)) + 1 : 1;
+    pages.push({ id: newId, content: '' });
+    currentPageIndex = pages.length - 1;
+    renderEditor();
+    renderPreview();
+    updatePageControls();
+}
+
+function deletePage() {
+    if (pages.length <= 1) {
+        alert("Cannot delete the only page.");
+        return;
+    }
+    if (confirm("Are you sure you want to delete this page?")) {
+        pages.splice(currentPageIndex, 1);
+        if (currentPageIndex >= pages.length) {
+            currentPageIndex = pages.length - 1;
+        }
+        renderEditor();
+        renderPreview();
+        updatePageControls();
+    }
+}
+
+function nextPage() {
+    if (currentPageIndex < pages.length - 1) {
+        saveCurrentPage();
+        currentPageIndex++;
+        renderEditor();
+        updatePageControls();
+    }
+}
+
+function prevPage() {
+    if (currentPageIndex > 0) {
+        saveCurrentPage();
+        currentPageIndex--;
+        renderEditor();
+        updatePageControls();
+    }
+}
+
+function updatePageControls() {
+    pageIndicator.innerText = `${currentPageIndex + 1} / ${pages.length}`;
+    prevPageBtn.disabled = currentPageIndex === 0;
+    nextPageBtn.disabled = currentPageIndex === pages.length - 1;
+}
+
+// Event Listeners for Page Controls
+if (addPageBtn) addPageBtn.addEventListener('click', addPage);
+if (deletePageBtn) deletePageBtn.addEventListener('click', deletePage);
+if (prevPageBtn) prevPageBtn.addEventListener('click', prevPage);
+if (nextPageBtn) nextPageBtn.addEventListener('click', nextPage);
+
 // --- INPUT HANDLER (RICH TEXT) ---
-editor.addEventListener('input', function(e) {
+editor.addEventListener('input', function (e) {
+    saveCurrentPage(); // Save logic
+    syncContent();     // Update preview immediately
+
     if (e.inputType === 'deleteContentBackward') return;
-    if (e.inputType === 'insertParagraph') return; // Do not mess with new lines
-    // Allow history undo/redo?
+    if (e.inputType === 'insertParagraph') return;
     if (e.inputType === 'historyUndo' || e.inputType === 'historyRedo') return;
 
     if (currentMode === 'english') return;
-    
+
     // We need the current Text Node and Offset
     const selection = window.getSelection();
     if (!selection.rangeCount) return;
     const range = selection.getRangeAt(0);
     const node = range.startContainer;
-    
+
     // Only process TEXT NODES
     if (node.nodeType !== Node.TEXT_NODE) return;
 
@@ -138,14 +229,12 @@ editor.addEventListener('input', function(e) {
 });
 
 
-// --- UNI LOGIC for TextNode ---
-// `node` is the text node being modified.
-// `offset` is the cursor position within that node.
+// --- UNI LOGIC & WIJESEKARA LOGIC (UNCHANGED) ---
 function handleUniTyping(node, offset, e) {
     const text = node.textContent;
-    const preText = text.substring(0, offset); 
+    const preText = text.substring(0, offset);
 
-    // 1. Suffix Replacements (දැනට පවතින ලැයිස්තුව)
+    // 1. Suffix Replacements
     for (let r of uniReplacements) {
         if (preText.endsWith(r.pattern)) {
             let newVal = r.replacement;
@@ -154,52 +243,23 @@ function handleUniTyping(node, offset, e) {
             let tail = text.substring(offset);
             node.textContent = newPre + tail;
             setCursor(node, newPre.length);
-            return; 
+            return;
         }
     }
 
-    // --- NEW LOGIC START: Generic Rakaranshaya ---
-    // If 'r' is typed after a Hal consonant, convert to Rakaranshaya immediately.
-    // Unicode: Hal (\u0DCA) + r -> Hal (\u0DCA) + ZWJ (\u200D) + Rayanna (\u0DBB)
-    
-    // Note: At this point, preText includes existing text + newly typed 'r'.
-    // `preText` should end with 'r'.
-    
+    // Rakaranshaya Logic
     if (preText.endsWith('r')) {
         let beforeR = preText.substring(0, preText.length - 1);
         if (beforeR.length > 0) {
-             let lastChar = beforeR.charAt(beforeR.length - 1);
-             // Check for Hal
-             if (lastChar === '\u0DCA') {
-                 // Replace [Hal] + 'r' with [Hal][ZWJ][Rayanna]
-                 let rakaranshaya = '\u0DCA\u200D\u0DBB'; 
-                 // We remove the last char (Hal) from `beforeR` foundation because we are rebuilding it? 
-                 // No, Hal is PART of the Ra replacement sequence? 
-                 // Actually `\u0DCA\u200D\u0DBB` IS the modifier relative to base consonant?
-                 // No. Rakaranshaya is applied TO a base consonant.
-                 // Base Consonant + Hal + ZWJ + Rayanna.
-                 // We have Base Consonant + Hal. Adding 'r'.
-                 // So we keep Base Consonant + Hal, and add ZWJ + Rayanna.
-                 // Wait. 'BeforeR' ends in Hal.
-                 // So we just need to append ZWJ + Rayanna to `beforeR`.
-                 // And since 'r' is in `preText` (the typed char), we are essentially REPLACING 'r' with ZWJ+Ra.
-                 
-                 // BUT: `uniConsonants['r']` maps 'r' to 'ර්'.
-                 // If we don't intercept here, Step 3 will turn 'r' -> 'ර්'.
-                 // So the result would be [Base][Hal][Ra][Hal]. That's not Rakaranshaya.
-                 
-                 // So here we replace `r` with `\u200D\u0DBB` (ZWJ + Rayanna).
-                 // Result: [Base][Hal] + [ZWJ][Rayanna]. This forms Rakaranshaya.
-                 
-                 let replacement = '\u200D\u0DBB'; 
-                 let newPre = beforeR + replacement; 
-                 // beforeR is everything before 'r'.
-                 
-                 let tail = text.substring(offset);
-                 node.textContent = newPre + tail;
-                 setCursor(node, newPre.length);
-                 return;
-             }
+            let lastChar = beforeR.charAt(beforeR.length - 1);
+            if (lastChar === '\u0DCA') {
+                let replacement = '\u200D\u0DBB';
+                let newPre = beforeR + replacement;
+                let tail = text.substring(offset);
+                node.textContent = newPre + tail;
+                setCursor(node, newPre.length);
+                return;
+            }
         }
     }
 
@@ -211,16 +271,14 @@ function handleUniTyping(node, offset, e) {
             if (beforeVowel.length >= 2) {
                 let halMark = beforeVowel.charAt(beforeVowel.length - 1);
                 let base = beforeVowel.charAt(beforeVowel.length - 2);
-                
-                if (halMark === '\u0DCA') { 
+
+                if (halMark === '\u0DCA') {
                     let mod = uniVowelModifiers[vKey];
                     if (mod !== undefined) {
                         let newVal = base + mod;
-                        // Replace [base][hal][key] -> [base][mod]
-                        // Remove 2 chars (base+hal) + keyLen
                         let newPre = beforeVowel.slice(0, -2) + newVal;
                         let tail = text.substring(offset);
-                        
+
                         node.textContent = newPre + tail;
                         setCursor(node, newPre.length);
                         return;
@@ -230,25 +288,22 @@ function handleUniTyping(node, offset, e) {
             // Alive Consonant + 'a'
             if (vKey === 'a' && beforeVowel.length >= 1) {
                 let base = beforeVowel.charAt(beforeVowel.length - 1);
-                 if (base >= '\u0D80' && base <= '\u0DFF') {
-                     let newVal = base + 'ා'; 
-                     let newPre = beforeVowel.slice(0, -1) + newVal;
-                     let tail = text.substring(offset);
-                     
-                     node.textContent = newPre + tail;
-                     setCursor(node, newPre.length);
-                     return;
-                 }
+                if (base >= '\u0D80' && base <= '\u0DFF') {
+                    let newVal = base + 'ා';
+                    let newPre = beforeVowel.slice(0, -1) + newVal;
+                    let tail = text.substring(offset);
+
+                    node.textContent = newPre + tail;
+                    setCursor(node, newPre.length);
+                    return;
+                }
             }
         }
     }
 
     // 3. Single Char Mapping
-    // Get last char typed (or last char of preText)
-    // Note: User typed a key. It is inserted.
-    // 'preText' contains it.
     let key = preText.charAt(preText.length - 1);
-    
+
     if (uniConsonants[key]) {
         let replacement = uniConsonants[key];
         let newPre = preText.slice(0, -1) + replacement;
@@ -266,51 +321,42 @@ function handleUniTyping(node, offset, e) {
 
 
 function handleWijesekaraTyping(node, offset, e) {
-    // Similar Logic, but for Wijesekara Map
     const text = node.textContent;
-    let typedChar = text.charAt(offset - 1); 
-    
-    // Fallback if typedChar empty (rare)
-    if (!typedChar) return; 
+    let typedChar = text.charAt(offset - 1);
+
+    if (!typedChar) return;
 
     // Logic: Look Up map
     let replacement = null;
     if (wijesekaraNormal[typedChar]) replacement = wijesekaraNormal[typedChar];
     else if (wijesekaraShift[typedChar]) replacement = wijesekaraShift[typedChar];
-    
+
     if (!replacement) return;
 
     let preText = text.substring(0, offset - 1);
     let postText = text.substring(offset);
-    
+
     // REORDERING (Visual -> Unicode)
     let prevChar = preText.charAt(preText.length - 1);
     const preModifiers = ['\u0DD9', '\u0DDA', '\u0DDB']; // ෙ, ේ, ෛ
 
     if (preModifiers.includes(prevChar)) {
-         // Swap
-         let visualPrev = prevChar;
-         let visualNew = replacement; // This is the consonant
-         
-         // New Prefix: ... (minus prev) + New + Prev
-         let newPre = preText.slice(0, -1) + visualNew + visualPrev;
-         
-         node.textContent = newPre + postText;
-         setCursor(node, newPre.length);
+        let visualPrev = prevChar;
+        let visualNew = replacement; // This is the consonant
+        let newPre = preText.slice(0, -1) + visualNew + visualPrev;
+        node.textContent = newPre + postText;
+        setCursor(node, newPre.length);
     } else {
-         // Standard Replace
-         let newPre = preText + replacement;
-         node.textContent = newPre + postText;
-         setCursor(node, newPre.length);
+        let newPre = preText + replacement;
+        node.textContent = newPre + postText;
+        setCursor(node, newPre.length);
     }
 }
 
 function setCursor(node, pos) {
     const range = document.createRange();
     const sel = window.getSelection();
-    // Safety check for length
     if (pos > node.textContent.length) pos = node.textContent.length;
-    
     range.setStart(node, pos);
     range.collapse(true);
     sel.removeAllRanges();
@@ -321,20 +367,19 @@ function setCursor(node, pos) {
 // Copy / Clear
 if (clearBtn) {
     clearBtn.addEventListener('click', () => {
-        if(confirm('Clear all text?')) {
-            editor.innerHTML = ''; // Div uses innerHTML
+        if (confirm('Clear all text on this page?')) {
+            editor.innerHTML = '';
+            saveCurrentPage();
+            renderPreview(); // Sync blank
             editor.focus();
         }
     });
 }
 if (copyBtn) {
     copyBtn.addEventListener('click', () => {
-        // Copy innerText or HTML? User likely wants Text for pasting elsewhere, or HTML for Word.
-        // Clipboard API usually copies plain text by default if we just grab value.
-        // Let's copy innerText.
         const textToCopy = editor.innerText;
         navigator.clipboard.writeText(textToCopy).then(() => {
-            showToast('Copied text!');
+            showToast('Copied page text!');
         });
     });
 }
@@ -371,8 +416,6 @@ const settingsModal = document.getElementById('settingsModal');
 const closeSettingsBtn = document.getElementById('closeSettingsBtn');
 const cancelSettingsBtn = document.getElementById('cancelSettingsBtn');
 const applySettingsBtn = document.getElementById('applySettingsBtn');
-const previewPage = document.getElementById('previewPage');
-const previewPageWrapper = document.getElementById('previewPageWrapper');
 const wordCount = document.getElementById('wordCount');
 
 // Inputs
@@ -391,63 +434,116 @@ const setLineHeight = document.getElementById('setLineHeight');
 const setTextColor = document.getElementById('setTextColor');
 const setBgColor = document.getElementById('setBgColor');
 
-// Sync Logic
+// Placeholder Content for Empty Pages
 const placeholderContent = `
-    <div class="flex items-center justify-center h-full text-slate-300 flex-col min-h-[297mm]">
+    <div class="flex items-center justify-center h-full text-slate-300 flex-col min-h-[inherit]">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
         </svg>
-        <p class="text-lg font-medium">No Content to Preview</p>
-        <p class="text-sm">Start typing to see your PDF preview</p>
+        <p class="text-lg font-medium">No Content</p>
+        <p class="text-sm">Page <span class="page-num-placeholder"></span></p>
     </div>
 `;
 
+// Sync Content & Render Preview
 function syncContent() {
+    // Word Count (Current Page)
     const content = editor.innerText.trim();
-    // Count Words
     const words = content === '' ? 0 : content.split(/\s+/).length;
     const chars = content.length;
     if (wordCount) wordCount.innerText = `Words: ${words} | Characters: ${chars}`;
 
-    // Update Preview
-    if (!previewPage) return;
-    
-    // Check if empty (ignoring title if present?)
-    // Actually, we should just clone innerHTML.
-    // If empty text node, show placeholder?
-    // Let's just sync for now.
-    
-    if (editor.innerHTML.trim() === '<br>' || editor.innerHTML.trim() === '') {
-         previewPage.innerHTML = placeholderContent;
-    } else {
-         previewPage.innerHTML = editor.innerHTML;
-    }
+    // Update the specific Preview Page for the current page
+    renderPreview();
 }
-editor.addEventListener('input', syncContent);
-// Initial Sync
-syncContent();
+
+function renderPreview() {
+    if (!previewPageWrapper) return;
+    previewPageWrapper.innerHTML = ''; // Clear
+
+    // Iterate all pages
+    pages.forEach((page, index) => {
+        // Create Page Container
+        const pageEl = document.createElement('div');
+        pageEl.className = "preview-page bg-white shadow-lg transition-all duration-300 break-words whitespace-pre-wrap relative";
+
+        // Settings Apply
+        applyPageStyles(pageEl);
+
+        // Content
+        if (page.content.trim() === '' || page.content.trim() === '<br>') {
+            let ph = placeholderContent.replace('<span class="page-num-placeholder"></span>', index + 1);
+            pageEl.innerHTML = ph;
+        } else {
+            pageEl.innerHTML = page.content;
+
+            // Document Title (Only on Page 1)
+            if (index === 0 && currentSettings.titleText && currentSettings.titleText.trim() !== "") {
+                const titleEl = document.createElement('h1');
+                titleEl.className = 'text-3xl font-bold mb-6 font-sinhala leading-normal';
+                titleEl.textContent = currentSettings.titleText;
+                titleEl.style.textAlign = currentSettings.titleAlign;
+                titleEl.style.color = currentSettings.textColor;
+                pageEl.prepend(titleEl);
+            }
+        }
+
+        // Highlight active page in preview
+        if (index === currentPageIndex) {
+            pageEl.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-2');
+        }
+
+        previewPageWrapper.appendChild(pageEl);
+    });
+}
+
+function applyPageStyles(el) {
+    // Dimensions
+    let pageW = 210;
+    let pageH = 297;
+
+    if (currentSettings.format === 'letter') { pageW = 215.9; pageH = 279.4; }
+    if (currentSettings.format === 'legal') { pageW = 215.9; pageH = 355.6; }
+
+    if (currentSettings.orientation === 'landscape') {
+        [pageW, pageH] = [pageH, pageW];
+    }
+
+    el.style.width = pageW + 'mm';
+    el.style.minHeight = pageH + 'mm';
+
+    // Margins -> Padding
+    el.style.paddingTop = currentSettings.marginTop + 'mm';
+    el.style.paddingRight = currentSettings.marginRight + 'mm';
+    el.style.paddingBottom = currentSettings.marginBottom + 'mm';
+    el.style.paddingLeft = currentSettings.marginLeft + 'mm';
+
+    // Aesthetics
+    el.style.backgroundColor = currentSettings.bgColor;
+    el.style.color = currentSettings.textColor;
+    el.style.lineHeight = currentSettings.lineHeight;
+    el.style.fontSize = currentSettings.fontSize + 'pt';
+    el.style.fontFamily = '"Noto Sans Sinhala", sans-serif';
+}
 
 
 // Alignment UI Handler
 alignButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-        // Reset all
         alignButtons.forEach(b => {
-             b.classList.remove('bg-indigo-50', 'text-indigo-600', 'border-indigo-500');
-             b.classList.add('text-slate-600', 'border-slate-300');
+            b.classList.remove('bg-indigo-50', 'text-indigo-600', 'border-indigo-500');
+            b.classList.add('text-slate-600', 'border-slate-300');
         });
-        // Active
         btn.classList.add('bg-indigo-50', 'text-indigo-600', 'border-indigo-500');
         btn.classList.remove('text-slate-600', 'border-slate-300');
-        
         setTitleAlign.value = btn.dataset.align;
     });
 });
 
 function updateAlignUI(align) {
     alignButtons.forEach(btn => {
-        if(btn.dataset.align === align) {
+        if (btn.dataset.align === align) {
             btn.click();
         }
     });
@@ -505,140 +601,81 @@ if (applySettingsBtn) {
         };
 
         applyVisualSettings();
-        
+        renderPreview(); // Re-render with new settings
         closeSettings();
         showToast('Settings Applied!');
     });
 }
 
 function applyVisualSettings() {
-    // 1. Editor Styles (Formatting only)
-    // Editor should maintain a comfortable writing view, so ignore Page Format/Margins here.
-    // We only apply typography.
+    // Editor Styles (Formatting only)
     editor.style.lineHeight = currentSettings.lineHeight;
-    // We don't necessarily apply bgColor to Editor in Split View?
-    // User requested "Brightness reduce", so keeping Editor white might be harsh if they chose dark bg.
-    // However, Preview usually reflects the PDF.
-    // Let's keep Editor basic/clean (white or slate-50) and Preview shows the real deal.
-    // BUT: The Font Size in editor should probably scale or stay readable.
-    // Let's apply font size to Editor too.
     editor.style.fontSize = currentSettings.fontSize + 'pt';
     editor.style.color = currentSettings.textColor;
-
-
-    // 2. Preview Styles (Full Layout)
-    if (previewPage) {
-        // Dimensions
-        let pageW = 210; 
-        let pageH = 297;
-        
-        if (currentSettings.format === 'letter') { pageW = 215.9; pageH = 279.4; }
-        if (currentSettings.format === 'legal') { pageW = 215.9; pageH = 355.6; } // Legal Height correct? Legal is 14in ~355.6mm
-
-        if (currentSettings.orientation === 'landscape') {
-            [pageW, pageH] = [pageH, pageW];
-        }
-
-        previewPage.style.width = pageW + 'mm';
-        previewPage.style.minHeight = pageH + 'mm';
-        
-        // Margins -> Padding
-        previewPage.style.paddingTop = currentSettings.marginTop + 'mm';
-        previewPage.style.paddingRight = currentSettings.marginRight + 'mm';
-        previewPage.style.paddingBottom = currentSettings.marginBottom + 'mm';
-        previewPage.style.paddingLeft = currentSettings.marginLeft + 'mm';
-        
-        // Aesthetics
-        previewPage.style.backgroundColor = currentSettings.bgColor;
-        previewPage.style.color = currentSettings.textColor;
-        previewPage.style.lineHeight = currentSettings.lineHeight;
-        previewPage.style.fontSize = currentSettings.fontSize + 'pt';
-        previewPage.style.fontFamily = '"Noto Sans Sinhala", sans-serif'; // Ensure font 
-    }
-
-    // 3. Document Title Handling
-    let titleEl = document.getElementById('docTitle');
-    if (currentSettings.titleText && currentSettings.titleText.trim() !== "") {
-        if (!titleEl) {
-            titleEl = document.createElement('h1');
-            titleEl.id = 'docTitle';
-            titleEl.className = 'text-3xl font-bold mb-6 font-sinhala outline-none';
-            editor.prepend(titleEl);
-        }
-        titleEl.textContent = currentSettings.titleText;
-        titleEl.style.textAlign = currentSettings.titleAlign;
-        titleEl.style.color = currentSettings.textColor; 
-    } else {
-        if (titleEl) {
-            titleEl.remove();
-        }
-    }
-    
-    // Trigger sync to update preview with new Title
-    syncContent();
 }
 
 // PDF Export (From Preview)
-downloadBtn.addEventListener('click', () => {
+downloadBtn.addEventListener('click', async () => {
     const { jsPDF } = window.jspdf;
-    
-    // We already have the previewPage with correct dimensions and styles.
-    // We just need to capture it.
-    
-    // Ensure content is synced
-    syncContent();
 
-    // Use previewPage directly? html2canvas needs it visible. It is visible.
-    // But user might be scrolled down. html2canvas handles that usually.
-    // Better to clone it to a clean container off-screen to ensure full capture without scrollbars etc?
-    
-    const captureEl = previewPage.cloneNode(true);
-    // Explicitly set dimensions on clone to ensure no responsiveness issues during capture
-    captureEl.style.width = previewPage.style.width;
-    captureEl.style.minHeight = previewPage.style.minHeight;
-    captureEl.style.position = 'fixed';
-    captureEl.style.top = '0';
-    captureEl.style.left = '-9999px';
-    captureEl.style.zIndex = '-1';
-    
-    document.body.appendChild(captureEl);
-    
-    html2canvas(captureEl, { scale: 2, useCORS: true }).then(canvas => {
-        const imgData = canvas.toDataURL('image/jpeg', 1.0);
-        
-        const pdf = new jsPDF({
-            orientation: currentSettings.orientation,
-            unit: 'mm',
-            format: currentSettings.format
-        });
-        
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight(); 
+    // Ensure content is saved
+    saveCurrentPage();
+    renderPreview(); // Ensure pure state
 
-        const imgProps = pdf.getImageProperties(imgData);
-        const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        
-        // Multi-page handling? 
-        // If imgHeight > pdfHeight, we technically need multiple pages.
-        // For now, let's just create one tall page or fit to one page?
-        // Standard behavior: fit width, let height spill?
-        // jsPDF addImage supports compression and placement.
-        
-        if (imgHeight > pdfHeight) {
-             // Simple multi-page approach
-             // Just add image. It will likely get cut or shrunk.
-             // For simple tool: One Page or Fit?
-             // Let's just add it.
-             pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, imgHeight);
-        } else {
-             pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, imgHeight);
-        }
-
-        pdf.save('Document.pdf');
-        
-        document.body.removeChild(captureEl);
+    const pdf = new jsPDF({
+        orientation: currentSettings.orientation,
+        unit: 'mm',
+        format: currentSettings.format
     });
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    // We need to capture EACH page div
+    const pageElements = document.querySelectorAll('.preview-page');
+
+    // Temporarily remove Ring (Highlight) class for clean export
+    pageElements.forEach(el => el.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-2'));
+
+    // Loading Toast?
+    showToast('Generating PDF...');
+
+    for (let i = 0; i < pageElements.length; i++) {
+        if (i > 0) pdf.addPage();
+
+        const pageEl = pageElements[i];
+
+        // Clone to Body for capture (to ensure visibility/cleanliness)
+        const captureEl = pageEl.cloneNode(true);
+        captureEl.style.width = pageEl.style.width;
+        captureEl.style.minHeight = pageEl.style.minHeight; // Important
+        captureEl.style.position = 'fixed';
+        captureEl.style.top = '0';
+        captureEl.style.left = '-9999px';
+        captureEl.style.zIndex = '-1';
+        document.body.appendChild(captureEl);
+
+        try {
+            const canvas = await html2canvas(captureEl, { scale: 2, useCORS: true });
+            const imgData = canvas.toDataURL('image/jpeg', 1.0);
+            const imgProps = pdf.getImageProperties(imgData);
+            const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, imgHeight);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            document.body.removeChild(captureEl);
+        }
+    }
+
+    // Restore Highlight
+    renderPreview();
+
+    pdf.save('Sinhala_Doc_MultiPage.pdf');
+    showToast('PDF Downloaded!');
 });
 
 // Init
+initPages();
 applyVisualSettings();

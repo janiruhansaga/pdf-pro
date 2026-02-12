@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +10,16 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+Sinhala:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+Sinhala:wght@400;700&display=swap"
+        rel="stylesheet">
     <!-- Custom Style -->
     <link rel="stylesheet" href="style.css">
-    
+
     <!-- Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -34,14 +37,17 @@
             content: attr(placeholder);
             color: #cbd5e1;
             pointer-events: none;
-            display: block; /* For Firefox */
+            display: block;
+            /* For Firefox */
         }
+
         /* Ensure focus ring works on div */
         [contenteditable]:focus {
             outline: none;
         }
     </style>
 </head>
+
 <body class="bg-slate-200 min-h-screen text-slate-800 font-sans selection:bg-indigo-100 selection:text-indigo-700">
 
     <!-- Navbar -->
@@ -49,9 +55,10 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <img src="5795520-middle.png" alt="Logo" class="w-8 h-8 rounded-lg object-contain">
-                <h1 class="text-xl font-semibold tracking-tight text-slate-900">PDF Creator <span class="text-indigo-600">Pro</span></h1>
+                <h1 class="text-xl font-semibold tracking-tight text-slate-900">PDF Creator <span
+                        class="text-indigo-600">Pro</span></h1>
             </div>
-            
+
             <a href="#" class="text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors">
                 Guide
             </a>
@@ -60,53 +67,70 @@
 
     <!-- Main Content -->
     <main class="max-w-[95%] mx-auto px-4 sm:px-6 lg:px-8 py-6 h-[calc(100vh-4rem)]">
-        
+
         <div class="bg-slate-50 rounded-2xl shadow-xl overflow-hidden border border-slate-200 flex flex-col h-full">
-            
+
             <!-- Main Toolbar -->
-            <div class="bg-white border-b border-slate-200 px-4 py-3 flex flex-wrap items-center justify-between gap-4 z-10 shadow-sm relative">
-                
+            <div
+                class="bg-white border-b border-slate-200 px-4 py-3 flex flex-wrap items-center justify-between gap-4 z-10 shadow-sm relative">
+
                 <!-- Mode Switcher -->
                 <div class="flex items-center bg-slate-100 rounded-lg border border-slate-200 p-1">
-                    <button id="modeUni" class="px-3 py-1.5 text-sm font-medium rounded-md transition-all text-white bg-indigo-600 shadow-sm">
+                    <button id="modeUni"
+                        class="px-3 py-1.5 text-sm font-medium rounded-md transition-all text-white bg-indigo-600 shadow-sm">
                         Uni Typing
                     </button>
-                    <button id="modeSinhala" class="px-3 py-1.5 text-sm font-medium rounded-md transition-all text-slate-600 hover:bg-white hover:shadow-sm">
+                    <button id="modeSinhala"
+                        class="px-3 py-1.5 text-sm font-medium rounded-md transition-all text-slate-600 hover:bg-white hover:shadow-sm">
                         Sinhala
                     </button>
-                    <button id="modeEnglish" class="px-3 py-1.5 text-sm font-medium rounded-md transition-all text-slate-600 hover:bg-white hover:shadow-sm">
+                    <button id="modeEnglish"
+                        class="px-3 py-1.5 text-sm font-medium rounded-md transition-all text-slate-600 hover:bg-white hover:shadow-sm">
                         English
                     </button>
                 </div>
 
                 <div class="flex items-center space-x-2">
-                    <button id="copyBtn" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-indigo-600 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                    <button id="copyBtn"
+                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-indigo-600 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                         </svg>
                         Copy
                     </button>
-                    
-                    <button id="clearBtn" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+
+                    <button id="clearBtn"
+                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                         Clear
                     </button>
 
                     <div class="h-6 w-px bg-slate-300 mx-2"></div>
 
-                    <button id="settingsBtn" class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-indigo-600 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <button id="settingsBtn"
+                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-indigo-600 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                         Settings
                     </button>
 
-                    <button id="downloadBtn" class="inline-flex items-center px-4 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    <button id="downloadBtn"
+                        class="inline-flex items-center px-4 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                         </svg>
                         Export
                     </button>
@@ -115,44 +139,119 @@
 
             <!-- Split View Container -->
             <div class="flex-grow flex flex-col md:flex-row overflow-hidden relative">
-                
+
                 <!-- Left: Editor Pane -->
                 <div class="w-full md:w-1/2 flex flex-col border-r border-slate-200 bg-white">
-                    
+
                     <!-- Formatting Toolbar -->
                     <div class="bg-slate-50 border-b border-slate-200 px-4 py-2 flex items-center space-x-1 shrink-0">
                         <span class="text-xs text-slate-400 font-medium mr-2 uppercase tracking-wider">Editor</span>
                         <div class="h-4 w-px bg-slate-200 mx-2"></div>
-                        <button id="cmdBold" class="p-1.5 rounded text-slate-600 hover:bg-white hover:shadow-sm hover:text-indigo-600 transition-all" title="Bold">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z" /></svg>
+                        <button id="cmdBold"
+                            class="p-1.5 rounded text-slate-600 hover:bg-white hover:shadow-sm hover:text-indigo-600 transition-all"
+                            title="Bold">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 4h8a4 4 0 014 4 4 4 0 01-4 4H6z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 12h9a4 4 0 014 4 4 4 0 01-4 4H6z" />
+                            </svg>
                         </button>
-                        <button id="cmdItalic" class="p-1.5 rounded text-slate-600 hover:bg-white hover:shadow-sm hover:text-indigo-600 transition-all" title="Italic">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4M6 16l-4-4" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 4h2a1 1 0 011 1v1a1 1 0 01-1 1h-1M8 20H6a1 1 0 01-1-1v-1a1 1 0 011-1h1M19 4L5 20" /></svg>
+                        <button id="cmdItalic"
+                            class="p-1.5 rounded text-slate-600 hover:bg-white hover:shadow-sm hover:text-indigo-600 transition-all"
+                            title="Italic">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 20l4-16m4 4l4 4M6 16l-4-4" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 4h2a1 1 0 011 1v1a1 1 0 01-1 1h-1M8 20H6a1 1 0 01-1-1v-1a1 1 0 011-1h1M19 4L5 20" />
+                            </svg>
                         </button>
-                        <button id="cmdUnderline" class="p-1.5 rounded text-slate-600 hover:bg-white hover:shadow-sm hover:text-indigo-600 transition-all" title="Underline">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 00-2-2V5a2 2 0 002-2h11a2 2 0 002 2v14a2 2 0 002 2z" opacity="0.1"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19h16M4 10c0 3 2.5 5 5 5s5-2 5-5V4M9 4v6m5-6v6" /></svg>
+                        <button id="cmdUnderline"
+                            class="p-1.5 rounded text-slate-600 hover:bg-white hover:shadow-sm hover:text-indigo-600 transition-all"
+                            title="Underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21H5a2 2 0 00-2-2V5a2 2 0 002-2h11a2 2 0 002 2v14a2 2 0 002 2z"
+                                    opacity="0.1" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 19h16M4 10c0 3 2.5 5 5 5s5-2 5-5V4M9 4v6m5-6v6" />
+                            </svg>
                         </button>
                         <div class="h-4 w-px bg-slate-200 mx-2"></div>
-                        
-                        <select id="cmdFontSize" class="p-1 rounded text-xs text-slate-600 border border-slate-300 hover:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white">
+
+                        <select id="cmdFontSize"
+                            class="p-1 rounded text-xs text-slate-600 border border-slate-300 hover:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 bg-white">
                             <option value="3" selected>Normal</option>
                             <option value="5">Large</option>
                             <option value="7">Huge</option>
                         </select>
-                        <div class="flex items-center ml-2 border border-slate-300 rounded p-0.5 hover:border-indigo-500 bg-white" title="Text Color">
-                            <input type="color" id="cmdColor" class="w-5 h-5 border-0 p-0 cursor-pointer bg-transparent" value="#000000">
+                        <div class="flex items-center ml-2 border border-slate-300 rounded p-0.5 hover:border-indigo-500 bg-white"
+                            title="Text Color">
+                            <input type="color" id="cmdColor" class="w-5 h-5 border-0 p-0 cursor-pointer bg-transparent"
+                                value="#000000">
                         </div>
                     </div>
 
-                    <div 
-                        id="sinhalaInput" 
-                        contenteditable="true" 
+                    <!-- Page Controls -->
+                    <div
+                        class="bg-indigo-50 px-4 py-2 border-b border-indigo-100 flex items-center justify-between shrink-0">
+                        <div class="flex items-center space-x-2">
+                            <button id="prevPageBtn"
+                                class="p-1 rounded-md text-slate-500 hover:text-indigo-600 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                title="Previous Page">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                            <span id="pageIndicator"
+                                class="text-xs font-semibold text-indigo-900 bg-white px-2 py-1 rounded border border-indigo-200 min-w-[3rem] text-center table-nums">1
+                                / 1</span>
+                            <button id="nextPageBtn"
+                                class="p-1 rounded-md text-slate-500 hover:text-indigo-600 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                title="Next Page">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center space-x-2">
+                            <button id="addPageBtn"
+                                class="flex items-center space-x-1 px-2 py-1 rounded text-xs font-medium text-indigo-700 bg-white border border-indigo-200 hover:bg-indigo-50 transition-all shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4" />
+                                </svg>
+                                <span>Add Page</span>
+                            </button>
+                            <div class="h-4 w-px bg-indigo-200 mx-1"></div>
+                            <button id="deletePageBtn"
+                                class="p-1 rounded text-red-400 hover:text-red-600 hover:bg-red-50 transition-all"
+                                title="Delete Current Page">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="sinhalaInput" contenteditable="true"
                         class="flex-grow w-full p-8 text-lg font-sinhala text-slate-900 outline-none leading-loose overflow-y-auto bg-white"
-                        placeholder="Start typing your document content here..."
-                        spellcheck="false"
-                    ></div>
-                    
-                    <div class="bg-white px-4 py-2 border-t border-slate-100 text-xs text-slate-400 flex justify-between shrink-0">
+                        placeholder="Type on this page..." spellcheck="false"></div>
+
+                    <div
+                        class="bg-white px-4 py-2 border-t border-slate-100 text-xs text-slate-400 flex justify-between shrink-0">
                         <span id="wordCount">Words: 0 | Characters: 0</span>
                         <span>Auto-save enabled</span>
                     </div>
@@ -161,23 +260,16 @@
                 <!-- Right: Live Preview Pane -->
                 <div class="w-full md:w-1/2 bg-slate-200 flex flex-col">
                     <div class="bg-slate-200 px-4 py-2 flex items-center justify-between shrink-0">
-                         <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Live Preview (A4)</span>
-                         <span class="text-xs text-slate-400">Updates automatically</span>
+                        <span class="text-xs text-slate-500 font-medium uppercase tracking-wider">Live Preview
+                            (A4)</span>
+                        <span class="text-xs text-slate-400">Updates automatically</span>
                     </div>
-                    
-                    <div class="flex-grow overflow-y-auto overflow-x-hidden p-8 flex justify-center items-start" id="previewScrollContainer">
-                        <div id="previewPageWrapper" class="relative transition-all duration-300 ease-in-out origin-top transform scale-95 md:scale-100">
-                             <div id="previewPage" class="bg-white shadow-lg min-h-[297mm] w-[210mm] transition-all duration-300 break-words whitespace-pre-wrap">
-                                 <!-- Preview Content Goes Here -->
-                                 <div class="flex items-center justify-center h-[297mm] text-slate-300 flex-col">
-                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                     </svg>
-                                     <p class="text-lg font-medium">No Content to Preview</p>
-                                     <p class="text-sm">Start typing to see your PDF preview</p>
-                                 </div>
-                             </div>
+
+                    <div class="flex-grow overflow-y-auto overflow-x-hidden p-8 flex justify-center items-start"
+                        id="previewScrollContainer">
+                        <div id="previewPageWrapper"
+                            class="flex flex-col space-y-8 relative transition-all duration-300 ease-in-out origin-top transform scale-95 md:scale-100">
+                            <!-- Pages will be injected here via JS -->
                         </div>
                     </div>
                 </div>
@@ -185,10 +277,12 @@
             </div>
         </div>
     </main>
-    
+
     <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-slate-800 text-white px-4 py-2 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div id="toast"
+        class="fixed bottom-6 right-6 bg-slate-800 text-white px-4 py-2 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-400" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
         </svg>
         <span id="toastMsg">Copied to clipboard!</span>
@@ -199,44 +293,69 @@
         <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full m-4 overflow-hidden animate-fade-in-up">
             <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <h3 class="text-lg font-semibold text-slate-800 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-600" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     PDF Settings
                 </h3>
                 <button id="closeSettingsBtn" class="text-slate-400 hover:text-slate-600 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
-            
+
             <div class="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
-                
+
                 <!-- Section: Document Header -->
                 <div>
                     <h4 class="text-sm font-semibold text-slate-900 mb-3 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-slate-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                         Document Header
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-1">
                             <label class="block text-xs font-medium text-slate-500 mb-1">Title Text</label>
-                            <input type="text" id="setTitleText" placeholder="Enter document title" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
+                            <input type="text" id="setTitleText" placeholder="Enter document title"
+                                class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1">Alignment</label>
                             <div class="flex items-center space-x-2">
-                                <button type="button" id="alignLeftBtn" class="p-2 border border-slate-300 rounded hover:bg-slate-50 text-slate-600 focus:ring-2 focus:ring-indigo-500 options-align" data-align="left">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h7" /></svg>
+                                <button type="button" id="alignLeftBtn"
+                                    class="p-2 border border-slate-300 rounded hover:bg-slate-50 text-slate-600 focus:ring-2 focus:ring-indigo-500 options-align"
+                                    data-align="left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 6h16M4 12h10M4 18h7" />
+                                    </svg>
                                 </button>
-                                <button type="button" id="alignCenterBtn" class="p-2 border border-slate-300 rounded hover:bg-slate-50 text-slate-600 focus:ring-2 focus:ring-indigo-500 options-align" data-align="center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M7 12h10M7 18h10" /></svg>
+                                <button type="button" id="alignCenterBtn"
+                                    class="p-2 border border-slate-300 rounded hover:bg-slate-50 text-slate-600 focus:ring-2 focus:ring-indigo-500 options-align"
+                                    data-align="center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 6h16M7 12h10M7 18h10" />
+                                    </svg>
                                 </button>
-                                <button type="button" id="alignRightBtn" class="p-2 border border-slate-300 rounded hover:bg-slate-50 text-slate-600 focus:ring-2 focus:ring-indigo-500 options-align" data-align="right">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M10 12h10M13 18h7" /></svg>
+                                <button type="button" id="alignRightBtn"
+                                    class="p-2 border border-slate-300 rounded hover:bg-slate-50 text-slate-600 focus:ring-2 focus:ring-indigo-500 options-align"
+                                    data-align="right">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 6h16M10 12h10M13 18h7" />
+                                    </svg>
                                 </button>
                                 <input type="hidden" id="setTitleAlign" value="center">
                             </div>
@@ -247,15 +366,18 @@
                 <!-- Section: Layout -->
                 <div>
                     <h4 class="text-sm font-semibold text-slate-900 mb-3 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-slate-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
                         </svg>
                         Page Layout
                     </h4>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1">Paper Format</label>
-                            <select id="setFormat" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
+                            <select id="setFormat"
+                                class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
                                 <option value="a4">A4 (210 × 297 mm)</option>
                                 <option value="letter">Letter (8.5 × 11 in)</option>
                                 <option value="legal">Legal (8.5 × 14 in)</option>
@@ -263,7 +385,8 @@
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1">Orientation</label>
-                            <select id="setOrientation" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
+                            <select id="setOrientation"
+                                class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
                                 <option value="portrait">Portrait</option>
                                 <option value="landscape">Landscape</option>
                             </select>
@@ -277,19 +400,23 @@
                     <div class="grid grid-cols-4 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1">Top</label>
-                            <input type="number" id="setMarginTop" value="20" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
+                            <input type="number" id="setMarginTop" value="20"
+                                class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1">Right</label>
-                            <input type="number" id="setMarginRight" value="20" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
+                            <input type="number" id="setMarginRight" value="20"
+                                class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1">Bottom</label>
-                            <input type="number" id="setMarginBottom" value="20" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
+                            <input type="number" id="setMarginBottom" value="20"
+                                class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1">Left</label>
-                            <input type="number" id="setMarginLeft" value="20" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
+                            <input type="number" id="setMarginLeft" value="20"
+                                class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
                         </div>
                     </div>
                 </div>
@@ -297,24 +424,29 @@
                 <!-- Section: Typography -->
                 <div>
                     <h4 class="text-sm font-semibold text-slate-900 mb-3 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-slate-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
                         </svg>
                         Typography
                     </h4>
                     <div class="grid grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1">Default Font Size (pt)</label>
-                            <input type="number" id="setFontSize" value="12" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
+                            <input type="number" id="setFontSize" value="12"
+                                class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1">Line Height</label>
-                            <input type="number" id="setLineHeight" value="1.5" step="0.1" class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
+                            <input type="number" id="setLineHeight" value="1.5" step="0.1"
+                                class="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 border">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1">Text Color</label>
                             <div class="flex items-center border border-slate-300 rounded-md overflow-hidden h-[38px]">
-                                <input type="color" id="setTextColor" value="#0f172a" class="w-full h-full p-0 border-0 cursor-pointer">
+                                <input type="color" id="setTextColor" value="#0f172a"
+                                    class="w-full h-full p-0 border-0 cursor-pointer">
                             </div>
                         </div>
                     </div>
@@ -325,8 +457,9 @@
                     <h4 class="text-sm font-semibold text-slate-900 mb-3">Background</h4>
                     <div>
                         <label class="block text-xs font-medium text-slate-500 mb-1">Background Color</label>
-                         <div class="flex items-center border border-slate-300 rounded-md overflow-hidden h-[38px] w-24">
-                            <input type="color" id="setBgColor" value="#ffffff" class="w-full h-full p-0 border-0 cursor-pointer">
+                        <div class="flex items-center border border-slate-300 rounded-md overflow-hidden h-[38px] w-24">
+                            <input type="color" id="setBgColor" value="#ffffff"
+                                class="w-full h-full p-0 border-0 cursor-pointer">
                         </div>
                     </div>
                 </div>
@@ -334,10 +467,12 @@
             </div>
 
             <div class="px-6 py-4 bg-slate-50 border-t border-slate-200 flex justify-end space-x-3">
-                <button id="cancelSettingsBtn" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <button id="cancelSettingsBtn"
+                    class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Cancel
                 </button>
-                <button id="applySettingsBtn" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
+                <button id="applySettingsBtn"
+                    class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm">
                     Apply Settings
                 </button>
             </div>
@@ -347,4 +482,5 @@
     <!-- Logic -->
     <script src="script.js"></script>
 </body>
+
 </html>
