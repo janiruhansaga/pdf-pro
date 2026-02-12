@@ -23,12 +23,13 @@ const uniVowelModifiers = {
     'o': 'ො', 'ii': 'ී', 'uu': 'ූ', 'ee': 'ේ', 'oo': 'ෝ'
 };
 const uniReplacements = [
-    { pattern: 'ඩ්හ්h', replacement: 'ධ්' }, // dhh
-    { pattern: 'ද්හ්', replacement: 'ධ්' },   // dhh
-    { pattern: 'ඩ්හ්', replacement: 'ද්' },   // dh
-    { pattern: 'ස්හ්', replacement: 'ශ්' },   // sh
+    { pattern: 'ඩ්h', replacement: 'ද්' },   // dh -> ද්
+    { pattern: 'ද්h', replacement: 'ධ්' },   // dhh -> ධ්
+    { pattern: 'ස්h', replacement: 'ශ්' },   // sh -> ශ්
     { pattern: 'ට්h', replacement: 'ත්' },   // th
     { pattern: 'බ්h', replacement: 'භ්' },   // bh
+    { pattern: 'ද්a', replacement: 'ද' },    // dha
+    { pattern: 'ශ්a', replacement: 'ශ' },    // sha
     { pattern: 'අa', replacement: 'ආ' },
     { pattern: 'ඉi', replacement: 'ඊ' },
     { pattern: 'උu', replacement: 'ඌ' },
